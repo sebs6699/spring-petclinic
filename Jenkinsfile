@@ -2,23 +2,21 @@ pipeline {
     agent any
 
     tools {
-        maven 'Maven 3'  // You need this tool configured in Jenkins
-        jdk 'JDK 21'     // You need this tool configured in Jenkins
+        maven 'Maven 3.9.9' 
+        jdk 'JDK 21'
     }
 
     stages {
-        stage('Build and Test with Jacoco') {
+        stage('Build and Test') {
             steps {
-                sh 'mvn clean verify jacoco:report'
+                bat 'mvn clean test'
             }
         }
     }
 
     post {
         always {
-            junit '**/target/surefire-reports/*.xml'
-            jacoco execPattern: '**/target/jacoco.exec'
-            archiveArtifacts artifacts: '**/target/*.jar', fingerprint: true
+            junit 'target/surefire-reports/*.xml'
         }
     }
 }
